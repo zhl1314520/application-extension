@@ -1,5 +1,6 @@
 """Project settings."""
 from pathlib import Path
+import os
 
 import pymysql
 
@@ -42,7 +43,7 @@ DATABASES = {
         'NAME': 'application_extension',
         'USER': 'root',
         'PASSWORD': '123456',       # ← 改成你的 MySQL 密码
-        'HOST': '127.0.0.1',
+        'HOST': os.environ.get('MYSQL_HOST', '127.0.0.1'),
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',

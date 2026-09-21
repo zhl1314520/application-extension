@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: dbe-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_DATABASE: application_extension
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  web:
+    build: .
+    container_name: dbe-web
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+
+volumes:
+  mysql_data:
