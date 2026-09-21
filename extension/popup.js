@@ -22,5 +22,17 @@ function onShowDetail() {
   console.log('[float-ball-popup] 点击了【详情】（功能待实现）');
 }
 
+function onLogin() {
+  // TODO(下一期): 登录页跳转
+  console.log('[float-ball-popup] 点击了【登录】（UI 占位）');
+}
+
+function onRegister() {
+  // TODO(下一期): 注册页跳转
+  console.log('[float-ball-popup] 点击了【注册】（UI 占位）');
+}
+
 document.getElementById('btn-add').addEventListener('click', onAddDeliveryInfo);
-document.getElementById('btn-detail').addEventListener('click', onShowDetail);
+if (document.getElementById('btn-detail')) document.getElementById('btn-detail').addEventListener('click', onShowDetail);
+if (document.getElementById('btn-login')) document.getElementById('btn-login').addEventListener('click', onLogin);
+if (document.getElementById('btn-register')) document.getElementById('btn-register').addEventListener('click', onRegister);
