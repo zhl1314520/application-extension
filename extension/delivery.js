@@ -139,7 +139,7 @@ function updateDisplay(data) {
     document.getElementById('current-url').textContent = data.url;
   }
   const companyName = parseCompanyName(data);
-  document.getElementById('company-name').textContent = companyName;
+  document.getElementById('company-name').value = companyName;
 }
 
 // ===== 初始化：从 URL query 参数接收数据 =====
@@ -256,7 +256,7 @@ if (submitBtn) {
   submitBtn.addEventListener('click', async () => {
     // 数据源：直接读"当前投递"页面上实际显示的内容，所见即所提交
     const url = (document.getElementById('current-url').textContent || '').trim();
-    const company = (document.getElementById('company-name').textContent || '').trim();
+    const company = (document.getElementById('company-name').value || '').trim();
     const position = getSelectedPosition(positionSelect, positionOther);
     const unfilledPosition = getSelectedPosition(positionSelectUnfilled, positionOtherUnfilled);
 
@@ -297,6 +297,7 @@ if (submitBtn) {
         alert('提交失败：' + (json && json.msg ? json.msg : '后端未返回有效数据'));
         return;
       }
+      showToast(isEditing ? '修改成功' : '提交成功');
     } catch (e) {
       alert('无法连接后端，请确认 Django 服务已启动（http://127.0.0.1:8000）。');
       return;
@@ -362,11 +363,26 @@ function escapeHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+// ===== Toast 居中弹窗：1s 自动消失 =====
+let _toastTimer = null;
+function showToast(msg) {
+  const overlay = document.getElementById('toast-overlay');
+  const msgEl  = document.getElementById('toast-msg');
+  if (!overlay || !msgEl) return;
+  msgEl.textContent = msg;
+  overlay.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => {
+    overlay.classList.remove('show');
+  }, 1000);
+}
+
 // ===== 删除记录 =====
 async function handleDelete(id) {
   if (!confirm('确定要删除这条投递记录吗？')) return;
   try {
     await fetch(`${API_BASE}/delete/${id}/`, { method: 'DELETE' });
+    showToast('删除成功');
   } catch (e) {
     alert('无法连接后端，删除失败。');
     return;
@@ -384,7 +400,7 @@ function handleEdit(id) {
 
   // 回填 URL 和公司名
   document.getElementById('current-url').textContent = r.url;
-  document.getElementById('company-name').textContent = r.company;
+  document.getElementById('company-name').value = r.company;
 
   const FIXED = ['软件测试工程师', '硬件测试工程师', '测试开发工程师', '测试工程师'];
   const sent = r.sent_position || '';

@@ -117,7 +117,7 @@
   }
   .submit-wrap {
     text-align: center;
-    margin-top: 8px;
+    margin-top: 35px;
     margin-bottom: 12px;
   }
   .submit-wrap button {
@@ -183,6 +183,40 @@
   .mine-table .col-position-unfilled { width: 120px; }
   .mine-table .col-action { width: 60px; white-space: nowrap; text-align: center; }
   .mine-table .col-action-del { width: 60px; white-space: nowrap; text-align: center; }
+
+  /* ===== Toast 居中弹窗 — 液态玻璃 ===== */
+  #toast-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.18);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  #toast-overlay.show { display: flex; }
+  #toast-msg {
+    padding: 14px 36px; border-radius: 20px;
+    font-size: 15px; font-weight: 600; color: #fff;
+    letter-spacing: .5px; pointer-events: none;
+    /* 玻璃底 */
+    background: linear-gradient(135deg,
+      rgba(255,255,255,.22) 0%,
+      rgba(255,255,255,.08) 50%,
+      rgba(255,255,255,.18) 100%);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    /* 边缘高光 & 折射 */
+    border: 1px solid rgba(255,255,255,.3);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,.18),
+      inset 0 1px 0 rgba(255,255,255,.45),
+      inset 0 -1px 0 rgba(0,0,0,.08);
+    /* 液滴圆角 + 入场动画 */
+    animation: toastIn .3s ease-out forwards;
+  }
+  @keyframes toastIn {
+    from { opacity: 0; transform: scale(.92) translateY(8px); }
+    to   { opacity: 1; transform: scale(1)   translateY(0); }
+  }
 </style>
 </head>
 <body>
@@ -196,7 +230,10 @@
     <section class="tab-panel active" id="panel-current">
       <h2>当前投递<button class="refresh-btn" id="refresh-btn" type="button" title="刷新当前网页数据">🔄</button></h2>
       <div class="url-box" id="current-url">（未获取到网址）</div>
-      <div class="url-box" id="company-name">（未解析到公司名）</div>
+      <div class="position-label">公司名</div>
+      <div class="url-box position-selector">
+        <input id="company-name" type="text" placeholder="自动解析到的公司名" style="display:block;width:100%" />
+      </div>
       <div class="position-label green">已投岗位</div>
       <div class="url-box position-selector">
         <select id="position-select">
@@ -223,7 +260,7 @@
       <div class="submit-wrap">
         <button id="submit-btn" type="button">Submit</button>
       </div>
-      <p class="placeholder">（框架占位，功能待后续迭代）</p>
+      <p class="placeholder"></p>
     </section>
     <section class="tab-panel" id="panel-mine">
       <h2>我的投递</h2>
@@ -231,7 +268,7 @@
         <table class="mine-table" id="mine-table">
           <thead>
             <tr>
-              <th class="col-id">NUM</th>
+              <th class="col-id">ID</th>
               <th class="col-time">投递时间</th>
               <th class="col-url">URL</th>
               <th class="col-company">公司名</th>
@@ -250,5 +287,10 @@
   </main>
 
   <script src="delivery.js"></script>
+
+  <!-- Toast 弹窗 -->
+  <div id="toast-overlay">
+    <div id="toast-msg"></div>
+  </div>
 </body>
 </html>
