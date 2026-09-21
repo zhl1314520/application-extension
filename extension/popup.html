@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    width: 220px;
+    margin: 0;
+    padding: 12px;
+    font: 14px/1.5 system-ui, "Microsoft YaHei", sans-serif;
+    background: #fff;
+  }
+  h1 { font-size: 14px; margin: 0 0 10px; color: #333; font-weight: 600; }
+  button {
+    display: block;
+    width: 100%;
+    padding: 9px 14px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #2b5cd9;
+    background: #eef3ff;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button:hover { background: #dde8ff; }
+  button:active { background: #cddcff; }
+  button:last-of-type { margin-bottom: 0; }
+  .tip { margin: 10px 0 0; font-size: 12px; color: #999; }
+</style>
+</head>
+<body>
+  <h1>💼 投递助手</h1>
+  <button id="btn-add" type="button">添加投递信息</button>
+  <button id="btn-detail" type="button">详情</button>
+  <p class="tip">当前版本按钮仅 UI，功能待后续迭代</p>
+  <script src="popup.js"></script>
+</body>
+</html>

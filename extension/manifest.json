@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "投递助手",
+  "version": "1.1.0",
+  "description": "记录投递的公司、岗位等信息，提供【添加投递信息】【详情】按钮",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    },
+    "default_popup": "popup.html",
+    "default_title": "投递助手"
+  },
+  "permissions": ["activeTab"],
+  "host_permissions": ["http://127.0.0.1:8000/*", "http://localhost:8000/*"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "all_frames": false,
+      "run_at": "document_idle"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+/* 悬浮球宿主元素：仅负责定位与层级，球体/面板样式在 Shadow DOM 内（content.js 注入） */
+#__float_ball_host__ {
+  position: fixed;
+  z-index: 2147483647;
+  line-height: 0;
+  /* left/top 由 content.js 设置 */
+}
