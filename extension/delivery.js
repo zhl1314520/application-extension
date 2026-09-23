@@ -2,7 +2,7 @@
 'use strict';
 
 // ===== 后端 API 基址（Django 服务）=====
-const API_BASE = 'http://127.0.0.1:8000/api';
+const API_BASE = 'http://172.25.26.203:8000/api';
 
 // ===== 缓存后端返回的记录，供编辑/删除回填使用 =====
 let mineRecords = [];

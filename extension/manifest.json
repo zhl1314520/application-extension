@@ -22,7 +22,7 @@
     "default_title": "投递助手"
   },
   "permissions": ["activeTab"],
-  "host_permissions": ["http://127.0.0.1:8000/*", "http://localhost:8000/*"],
+  "host_permissions": ["http://172.25.26.203:8000/*", "http://172.25.26.203:8000/*"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

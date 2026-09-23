@@ -1,31 +1,39 @@
-version: '3.8'
-
+# 定义的是两个服务，最终会运行两个容器
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: dbe-mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: "123456"
-      MYSQL_DATABASE: application_extension
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-
+  # 容器：mysql，使用本地的 MySQL 服务
+#  mysql:
+#    image: mysql:8.0                          # 直接使用镜像
+#    container_name: application-extension-container-mysql
+#    restart: always                           # 容器异常退出后 docker 使得容器自动重启
+#    healthcheck:
+#      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p123456"]
+#      interval: 5s
+#      timeout: 3s
+#      retries: 20
+#    environment:
+#      MYSQL_ROOT_PASSWORD: "123456"
+#      MYSQL_DATABASE: application_extension
+#    ports:
+#      - "3307:3306"                           # 宿主机端口:容器端口，改本地为 3307 防止本地端口被占用
+#    volumes:
+#      - mysql_data:/var/lib/mysql            # 持久化数据，mysql_data是 Docker Volume（docker 数据卷）
+                                            # 容器内的 /var/lib/mysql 是数据存储位置，即使容器删除，数据也不会丢失
+                                            # /var/lib/mysql 是 MySQL 官方镜像"约定好的"的 MySQL 数据目录
   web:
-    build: .
-    container_name: dbe-web
+    build: .                              # 使用根据当前目录的 Dockerfile 构建好的镜像
+    container_name: application-extension-container-web
     restart: always
-    command: python manage.py runserver 0.0.0.0:8000
+    # 0.0.0.0：监听所有网卡，127.0.0.1可能会导致容器外部无法访问
+    command: python manage.py runserver 0.0.0.0:8000  # 容器启动后执行的命令
     volumes:
-      - .:/app
+      - .:/app      # 将当前目录挂载到容器的 /app 目录下，方便调试改动代码，容器内代码会自动更新
     ports:
       - "8000:8000"
-    depends_on:
-      - mysql
+#    depends_on:
+#      mysql:       # 依赖于 mysql 服务，确保 mysql 容器先启动
+#        condition: service_healthy  # 等待 mysql 容器健康检查通过后再启动 web 容器
     environment:
-      MYSQL_HOST: mysql
+      MYSQL_HOST: host.docker.internal   # 建立 mysql 与 web 容器的连接，用于 web 容器访问 mysql 容器
 
-volumes:
-  mysql_data:
+#volumes:
+#  mysql_data:     # 上面使用了这个，这里需要定义一下
